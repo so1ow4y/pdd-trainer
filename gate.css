@@ -1,0 +1,54 @@
+/* Страница входа и панель шифрования — те же цвета, что у приложения (тема по системе). */
+:root {
+  --bg: #f5f6fa; --surface: #fff; --surface-2: #eef0f6; --text: #1b1d27; --muted: #676b7e; --border: #e1e4ee;
+  --accent: #3949ab; --accent-text: #fff; --ok: #2e7d32; --bad: #d32f2f; --warn: #b85c00; color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #111218; --surface: #1b1d26; --surface-2: #242734; --text: #e8e9f0; --muted: #9a9eb3; --border: #2c2f3d;
+    --accent: #8c9eff; --accent-text: #0f1220; --ok: #81c784; --bad: #ff6b6b; --warn: #ffb74d; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--accent); }
+.gate { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px; gap: 14px; }
+.gate-card { width: min(420px, 100%); padding: 28px 24px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: 0 8px 40px rgb(20 22 40 / .12); text-align: center; }
+.gate-letter { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--accent); color: var(--accent-text); font-weight: 800; font-size: 28px; }
+.gate h1 { margin: 12px 0 4px; font-size: 22px; }
+.gate-sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+.gate-field { display: block; text-align: left; font-size: 14px; font-weight: 600; }
+.gate-input { display: flex; gap: 6px; margin-top: 6px; }
+.gate-input input { flex: 1; min-width: 0; min-height: 46px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); color: var(--text); font: inherit; font-size: 17px; letter-spacing: .02em; }
+.gate-input input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.gate-eye { width: 46px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); cursor: pointer; font-size: 18px; }
+.gate-eye[aria-pressed="true"] { background: var(--surface-2); }
+.gate-btn { width: 100%; min-height: 46px; margin-top: 14px; border: 0; border-radius: 12px; background: var(--accent); color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; }
+.gate-btn:disabled { opacity: .6; cursor: wait; }
+.gate-hint { margin: 12px 0 0; color: var(--muted); font-size: 12.5px; }
+.gate-status { min-height: 1.5em; margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+.gate-status.ok { color: var(--ok); }
+.gate-status.bad { color: var(--bad); }
+.gate-foot { font-size: 13px; color: var(--muted); }
+
+/* Панель шифрования (vault.html) */
+.panel { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+.panel h1 { font-size: 24px; margin: 0 0 6px; }
+.panel .lead { color: var(--muted); margin: 0 0 18px; }
+.panel section { margin: 14px 0; padding: 16px 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.panel h2 { font-size: 17px; margin: 0 0 6px; }
+.panel p { margin: 6px 0; font-size: 14px; }
+.panel .muted { color: var(--muted); }
+.panel .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 0; }
+.panel input[type="password"], .panel input[type="text"], .panel input[type="number"] { min-height: 40px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font: inherit; }
+.panel input[type="password"], .panel input[type="text"] { flex: 1 1 220px; }
+.panel button { min-height: 40px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.panel button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.panel button:disabled { opacity: .55; cursor: default; }
+.panel label.check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin-top: 8px; }
+.panel .log { margin-top: 10px; max-height: 260px; overflow: auto; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); font: 12.5px/1.5 ui-monospace, Consolas, monospace; white-space: pre-wrap; }
+.panel .log:empty { display: none; }
+.panel .bar { height: 8px; margin-top: 10px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+.panel .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+.panel .ok { color: var(--ok); }
+.panel .bad { color: var(--bad); }
+.panel .warn { color: var(--warn); }
+.panel code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }

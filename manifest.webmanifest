@@ -1,0 +1,12 @@
+{
+  "name": "ПДД-тренажёр",
+  "short_name": "ПДД",
+  "description": "Конспекты лекций, разборы билетов и маршрутов, генератор билетов",
+  "lang": "ru",
+  "start_url": "./#/lessons",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6fa",
+  "theme_color": "#3949ab",
+  "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3949ab">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Вход · ПДД-тренажёр</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="gate.css">
+  <script src="vault-crypto.js" defer></script>
+  <script src="login.js" defer></script>
+</head>
+<body>
+  <main class="gate">
+    <div class="gate-card">
+      <span class="gate-letter" aria-hidden="true">П</span>
+      <h1>ПДД-тренажёр</h1>
+      <p class="gate-sub">Приложение зашифровано. Введите пароль — оно расшифруется прямо в этом браузере.</p>
+      <form id="login" autocomplete="on" hidden>
+        <input type="text" name="username" value="pdd-trainer" autocomplete="username" hidden>
+        <label class="gate-field">
+          <span>Пароль</span>
+          <span class="gate-input">
+            <input id="password" type="password" autocomplete="current-password" required autofocus spellcheck="false">
+            <button type="button" id="show" class="gate-eye" aria-label="Показать пароль" aria-pressed="false">👁</button>
+          </span>
+        </label>
+        <button type="submit" id="enter" class="gate-btn">Войти</button>
+        <p class="gate-hint">Вход запоминается на этом устройстве до выхода из приложения. Выход стирает с устройства всё.</p>
+      </form>
+      <p id="status" class="gate-status" role="status" aria-live="polite">Загрузка…</p>
+    </div>
+    <p class="gate-foot"><a href="vault.html">Шифрование и расшифровка (для автора)</a></p>
+  </main>
+  <noscript>Для входа нужен JavaScript.</noscript>
+</body>
+</html>

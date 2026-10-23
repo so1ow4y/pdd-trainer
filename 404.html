@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <title>ПДД-тренажёр</title>
+  <script>
+    // GitHub Pages отдаёт эту страницу на любой несуществующий адрес. Адреса внутри приложения (…/app/…) без входа
+    // не существуют на сервере — отправляем на страницу входа, а после входа она вернёт сюда же (?next=…).
+    (function () {
+      var p = location.pathname;
+      var i = p.indexOf('/app/');
+      if (i >= 0) location.replace(p.slice(0, i + 1) + '?next=' + encodeURIComponent(p.slice(i + 1)) + location.hash);
+    })();
+  </script>
+</head>
+<body style="font-family:system-ui,sans-serif;text-align:center;padding:20vh 16px">
+  <p>Страница не найдена.</p>
+</body>
+</html>

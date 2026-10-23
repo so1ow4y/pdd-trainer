@@ -1,0 +1,15 @@
+{
+ "format": "pdd-vault",
+ "version": 1,
+ "cipher": "AES-256-GCM",
+ "kdf": {
+  "name": "PBKDF2",
+  "hash": "SHA-256",
+  "iterations": 600000,
+  "salt": "yc1eZxZfl4BQcJ64v6iMuA"
+ },
+ "manifest": {
+  "file": "manifest.bin",
+  "iv": "-Oyi25kob0MDgUDM"
+ }
+}
