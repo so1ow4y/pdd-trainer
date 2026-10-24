@@ -1,11 +1,11 @@
 /* Страница входа и панель шифрования — те же цвета, что у приложения (тема по системе). */
 :root {
   --bg: #f5f6fa; --surface: #fff; --surface-2: #eef0f6; --text: #1b1d27; --muted: #676b7e; --border: #e1e4ee;
-  --accent: #3949ab; --accent-text: #fff; --ok: #2e7d32; --bad: #d32f2f; --warn: #b85c00; color-scheme: light;
+  --accent: #b26a00; --accent-text: #fff; --ok: #2e7d32; --bad: #d32f2f; --warn: #b85c00; color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root { --bg: #111218; --surface: #1b1d26; --surface-2: #242734; --text: #e8e9f0; --muted: #9a9eb3; --border: #2c2f3d;
-    --accent: #8c9eff; --accent-text: #0f1220; --ok: #81c784; --bad: #ff6b6b; --warn: #ffb74d; color-scheme: dark; }
+    --accent: #ffc93c; --accent-text: #1d1503; --ok: #81c784; --bad: #ff6b6b; --warn: #ffb74d; color-scheme: dark; }
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
