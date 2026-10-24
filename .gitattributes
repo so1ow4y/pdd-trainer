@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Зашифрованные файлы хранилища — строго как есть: замена переводов строк испортила бы шифротекст
+*.bin binary

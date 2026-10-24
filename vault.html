@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3949ab">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Хранилище · ПДД-тренажёр</title>
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="gate.css">
+  <script src="vault-crypto.js" defer></script>
+  <script src="vault-panel.js" defer></script>
+</head>
+<body>
+  <main class="panel">
+    <h1>Хранилище</h1>
+    <p class="lead">Шифрование и расшифровка приложения прямо в браузере — то же, что <code>python tools/vault.py</code>.
+      AES-256-GCM, ключ из пароля (PBKDF2-SHA256). Пароль никуда не отправляется и нигде не сохраняется.
+      <a href="./">← ко входу</a></p>
+
+    <section>
+      <h2>1. Пароль</h2>
+      <p class="muted">Нужен для всего ниже. «Проверить» открывает опубликованное хранилище этого сайта.</p>
+      <div class="row">
+        <input type="text" name="username" value="pdd-trainer" autocomplete="username" hidden>
+        <input id="pw" type="password" placeholder="Пароль хранилища" autocomplete="current-password" spellcheck="false">
+        <button id="check" class="primary">Проверить</button>
+      </div>
+      <p id="pw-status" class="muted"></p>
+    </section>
+
+    <section id="fs">
+      <h2>2. Папка проекта <span class="muted">(Chrome, Edge, Яндекс Браузер на компьютере)</span></h2>
+      <p class="muted">Выберите папку <code>pdd-trainer</code> — ту, где лежат <code>app/</code> и <code>vault/</code>.
+        Браузер спросит разрешение на запись. Папки <code>.git</code> и <code>__pycache__</code> не трогаются.</p>
+      <div class="row">
+        <button id="pick">Выбрать папку проекта</button>
+        <span id="folder" class="muted"></span>
+      </div>
+      <div class="row">
+        <button id="status" disabled>Что изменилось</button>
+        <button id="encrypt" class="primary" disabled>Зашифровать app/ → vault/</button>
+        <button id="decrypt" disabled>Расшифровать vault/ → app/</button>
+      </div>
+      <label class="check"><input type="checkbox" id="force"> При расшифровке перезаписывать файлы app/, которые отличаются от хранилища</label>
+      <label class="check"><input type="checkbox" id="rekey"> Зашифровать заново с новой солью (если хранилища ещё нет — так и будет)</label>
+      <h2 style="margin-top:14px">Смена пароля</h2>
+      <p class="muted">Всё хранилище перешифровывается новым ключом. Старый пароль к нему больше не подойдёт;
+        у всех, кто входил, вход сбросится. Если есть <code>secrets/vault-password.txt</code> — он обновится.</p>
+      <div class="row">
+        <input id="pw-new" type="password" placeholder="Новый пароль" autocomplete="new-password" spellcheck="false">
+        <input id="pw-new2" type="password" placeholder="Ещё раз" autocomplete="new-password" spellcheck="false">
+        <button id="passwd" disabled>Сменить пароль</button>
+        <button id="gen" type="button">Придумать</button>
+      </div>
+      <div class="bar"><i id="bar"></i></div>
+      <div id="log" class="log"></div>
+    </section>
+
+    <section>
+      <h2>3. Без доступа к папкам <span class="muted">(любой браузер, телефон)</span></h2>
+      <div class="row">
+        <button id="zip-src">Скачать исходники (ZIP)</button>
+        <span class="muted">— расшифровать опубликованное хранилище сайта в архив с папкой <code>app/</code></span>
+      </div>
+      <div class="row">
+        <button id="zip-enc-btn" type="button">Зашифровать папку app/ в ZIP</button>
+        <input id="zip-enc" type="file" webkitdirectory multiple hidden>
+        <span class="muted">— архив с папкой <code>vault/</code>: распакуйте его в проект вместо старой</span>
+      </div>
+      <div id="log2" class="log"></div>
+    </section>
+
+    <section>
+      <h2>4. Выход</h2>
+      <p class="muted">Стирает с этого устройства всё, что оставило приложение: ключ входа, прогресс, пометки, настройки,
+        клавиши (localStorage, IndexedDB), кеши и service worker. Сохранённые пароли браузера — это уже его менеджер паролей.</p>
+      <div class="row"><button id="wipe">Выйти и стереть всё с устройства</button></div>
+      <p id="wipe-status" class="muted"></p>
+    </section>
+  </main>
+</body>
+</html>

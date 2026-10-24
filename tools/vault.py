@@ -29,6 +29,7 @@ import secrets
 import shutil
 import sys
 import time
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -253,7 +254,7 @@ def self_test():
 
 class Keys:
     def __init__(self, password, salt, iterations):
-        raw = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, iterations, dklen=64)
+        raw = hashlib.pbkdf2_hmac('sha256', unicodedata.normalize('NFC', password).encode('utf-8'), salt, iterations, dklen=64)
         self.cipher = gcm(raw[:32])
         self.names = raw[32:]
 
@@ -443,7 +444,11 @@ def cmd_status(args):
     for title, lst in (('изменены', changed), ('новые', added), ('удалены', gone)):
         for p in lst:
             print(f'  {title}: {p}')
-    print('Без изменений.' if not (changed or added or gone) else f'Изменено {len(changed)}, новых {len(added)}, удалено {len(gone)} — python tools/vault.py encrypt')
+    if not (changed or added or gone):
+        print('Без изменений.')
+        return
+    print(f'Изменено {len(changed)}, новых {len(added)}, удалено {len(gone)} — python tools/vault.py encrypt')
+    sys.exit(1)  # для pre-commit: хранилище отстаёт от app/
 
 
 def cmd_passwd(args):
@@ -485,6 +490,11 @@ def cmd_genpass(args):
 
 
 def main():
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding='utf-8', errors='replace')  # консоль Windows с кодировкой cp1252/cp866
+        except (AttributeError, ValueError):
+            pass
     ap = argparse.ArgumentParser(description='Шифрование app/ ↔ vault/ для публикации ПДД-тренажёра.')
     ap.add_argument('--password-file', help='файл с паролем (по умолчанию secrets/vault-password.txt)')
     sub = ap.add_subparsers(dest='cmd', required=True)

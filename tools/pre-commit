@@ -1,0 +1,13 @@
+#!/bin/sh
+# Проверка перед коммитом в публичную репу: vault/ должен совпадать с app/.
+# Установка: cp tools/pre-commit .git/hooks/pre-commit
+# Нет папки app/ или нет пароля (secrets/vault-password.txt, PDD_VAULT_PASSWORD) — проверка пропускается.
+
+[ -d app ] || exit 0
+[ -f secrets/vault-password.txt ] || [ -n "$PDD_VAULT_PASSWORD" ] || exit 0
+
+if ! out=$(python tools/vault.py status 2>&1); then
+  printf '%s\n\nvault/ отстаёт от app/. Выполните: python tools/vault.py encrypt && git add vault\n(пропустить проверку: git commit --no-verify)\n' "$out" >&2
+  exit 1
+fi
+exit 0
