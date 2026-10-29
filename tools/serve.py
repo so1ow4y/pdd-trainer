@@ -1,12 +1,18 @@
-"""Локальный сервер для разработки: python tools/serve.py [порт] → http://localhost:8080"""
+"""Локальный сервер для разработки: python tools/serve.py [порт] [адрес] → http://localhost:8080
+
+Адрес по умолчанию — localhost. Чтобы открыть приложение с телефона в той же сети: python tools/serve.py 8080 0.0.0.0
+(вход по паролю работает только на localhost или по HTTPS: на http://<ip> браузер не запускает service worker).
+"""
 
 import functools
 import http.server
+import socket
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
+HOST = sys.argv[2] if len(sys.argv) > 2 else 'localhost'
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -18,8 +24,27 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 
+def lan_addresses():
+    """IPv4-адреса этого компьютера в локальной сети (без 127.x)."""
+    found = set()
+    try:
+        found.update(a[4][0] for a in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET))
+    except OSError:
+        pass
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(('10.255.255.255', 1))  # пакет не отправляется — так ОС выбирает адрес основного интерфейса
+            found.add(s.getsockname()[0])
+    except OSError:
+        pass
+    return sorted(a for a in found if not a.startswith('127.'))
+
+
 if __name__ == '__main__':
     handler = functools.partial(Handler, directory=str(ROOT))
-    with http.server.ThreadingHTTPServer(('localhost', PORT), handler) as httpd:
-        print(f'http://localhost:{PORT}')
+    with http.server.ThreadingHTTPServer((HOST, PORT), handler) as httpd:
+        print(f'http://localhost:{PORT}', flush=True)
+        if HOST in ('0.0.0.0', ''):
+            for ip in lan_addresses():
+                print(f'http://{ip}:{PORT}', flush=True)
         httpd.serve_forever()
