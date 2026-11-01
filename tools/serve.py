@@ -16,12 +16,23 @@ HOST = sys.argv[2] if len(sys.argv) > 2 else 'localhost'
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    protocol_version = 'HTTP/1.1'  # соединение живёт дольше одного файла: сотни картинок грузятся заметно быстрее
     extensions_map = {**http.server.SimpleHTTPRequestHandler.extensions_map, '.js': 'text/javascript', '.mjs': 'text/javascript',
                       '.webmanifest': 'application/manifest+json', '.webp': 'image/webp'}
 
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store')
         super().end_headers()
+
+
+class DualStackServer(http.server.ThreadingHTTPServer):
+    """IPv4 и IPv6 сразу: на Windows localhost сначала пробует ::1 и без этого теряет по 300 мс на каждый файл."""
+
+    address_family = socket.AF_INET6
+
+    def server_bind(self):
+        self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+        super().server_bind()
 
 
 def lan_addresses():
@@ -42,7 +53,8 @@ def lan_addresses():
 
 if __name__ == '__main__':
     handler = functools.partial(Handler, directory=str(ROOT))
-    with http.server.ThreadingHTTPServer((HOST, PORT), handler) as httpd:
+    server = DualStackServer if HOST in ('0.0.0.0', '') else http.server.ThreadingHTTPServer
+    with server(('::' if server is DualStackServer else HOST, PORT), handler) as httpd:
         print(f'http://localhost:{PORT}', flush=True)
         if HOST in ('0.0.0.0', ''):
             for ip in lan_addresses():
